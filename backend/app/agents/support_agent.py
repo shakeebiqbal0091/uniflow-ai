@@ -44,15 +44,25 @@ class SupportAgent:
     async def execute_tool(self, tool_name: str, tool_input: dict) -> dict[str, Any]:
         """Execute a support tool with the given input."""
         try:
-            if tool_name == "classify_issue":
-                # TODO: Implement issue classification
+            if tool_name == "create_support_ticket":
+                return await self.tools.create_support_ticket(
+                    student_id=tool_input.get("student_id"),
+                    category=tool_input.get("category"),
+                    title=tool_input.get("title"),
+                    description=tool_input.get("description"),
+                    priority=tool_input.get("priority", "NORMAL"),
+                )
+            elif tool_name == "get_issue_status":
+                return await self.tools.get_issue_status(
+                    tool_input.get("student_id")
+                )
+            elif tool_name == "classify_issue":
+                # No standalone classifier — category is currently supplied
+                # by the caller/LLM and passed straight into create_support_ticket().
                 return {"error": "Issue classification not yet implemented"}
             elif tool_name == "assess_priority":
-                # TODO: Implement priority assessment
+                # Same as above — priority is caller-supplied, not inferred yet.
                 return {"error": "Priority assessment not yet implemented"}
-            elif tool_name == "create_support_ticket":
-                # TODO: Implement ticket creation
-                return {"error": "Support ticket creation not yet implemented"}
             else:
                 return {"error": f"Unknown tool: {tool_name}"}
         except Exception as e:

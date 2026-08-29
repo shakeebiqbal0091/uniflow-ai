@@ -44,14 +44,23 @@ class EnrollmentAgent:
         """Execute an enrollment tool with the given input."""
         try:
             if tool_name == "check_course_eligibility":
-                # TODO: Implement course eligibility check
-                return {"error": "Course eligibility check not yet implemented"}
+                return await self.tools.check_course_eligibility(
+                    tool_input.get("student_id"), tool_input.get("course_code")
+                )
+            elif tool_name == "get_course_details":
+                return await self.tools.get_course_details(
+                    tool_input.get("course_code")
+                )
             elif tool_name == "verify_prerequisites":
-                # TODO: Implement prerequisite verification
-                return {"error": "Prerequisite verification not yet implemented"}
+                # No standalone prerequisite check — check_course_eligibility()
+                # already validates prerequisites as part of eligibility.
+                return await self.tools.check_course_eligibility(
+                    tool_input.get("student_id"), tool_input.get("course_code")
+                )
             elif tool_name == "get_enrollment_status":
-                # TODO: Implement enrollment status retrieval
-                return {"error": "Enrollment status lookup not yet implemented"}
+                return await self.tools.get_enrollment_status(
+                    tool_input.get("student_id")
+                )
             else:
                 return {"error": f"Unknown tool: {tool_name}"}
         except Exception as e:

@@ -44,13 +44,19 @@ class DocumentAgent:
         """Execute a document tool with the given input."""
         try:
             if tool_name == "validate_document":
-                # TODO: Implement document validation
-                return {"error": "Document validation not yet implemented"}
+                return await self.tools.validate_document(
+                    tool_input.get("document_id"), tool_input.get("document_type")
+                )
+            elif tool_name == "get_document_status":
+                return await self.tools.get_document_status(
+                    tool_input.get("student_id")
+                )
             elif tool_name == "classify_document":
-                # TODO: Implement document classification
+                # No dedicated classifier yet — validate_document() compares
+                # against the declared type only. Needs OCR/field extraction (claude.md §12).
                 return {"error": "Document classification not yet implemented"}
             elif tool_name == "extract_document_data":
-                # TODO: Implement data extraction
+                # Needs OCR/field extraction pipeline — not built yet.
                 return {"error": "Document data extraction not yet implemented"}
             else:
                 return {"error": f"Unknown tool: {tool_name}"}

@@ -44,13 +44,14 @@ class PolicyAgent:
         """Execute a policy tool with the given input."""
         try:
             if tool_name == "search_policies":
-                # TODO: Implement policy search
-                return {"error": "Policy search not yet implemented"}
+                return await self.tools.search_policies(tool_input.get("query"))
             elif tool_name == "get_policy_details":
-                # TODO: Implement policy retrieval
-                return {"error": "Policy retrieval not yet implemented"}
+                return await self.tools.get_policy_details(
+                    tool_input.get("policy_id")
+                )
             elif tool_name == "get_policy_citations":
-                # TODO: Implement citation retrieval
+                # search_policies()/get_policy_details() currently return keyword
+                # matches, not grounded citations — needs the RAG pipeline (claude.md §11).
                 return {"error": "Policy citation retrieval not yet implemented"}
             else:
                 return {"error": f"Unknown tool: {tool_name}"}

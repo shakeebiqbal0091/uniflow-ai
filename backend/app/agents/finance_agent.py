@@ -44,13 +44,20 @@ class FinanceAgent:
         """Execute a finance tool with the given input."""
         try:
             if tool_name == "get_fee_balance":
-                # TODO: Implement fee balance lookup
-                return {"error": "Fee lookup not yet implemented"}
-            elif tool_name == "verify_payment":
-                # TODO: Implement payment verification
-                return {"error": "Payment verification not yet implemented"}
+                return await self.tools.get_fee_balance(
+                    tool_input.get("student_id")
+                )
+            elif tool_name == "get_payment_status":
+                return await self.tools.get_payment_status(
+                    tool_input.get("student_id")
+                )
+            elif tool_name == "get_invoice_details":
+                return await self.tools.get_invoice_details(
+                    tool_input.get("student_id")
+                )
             elif tool_name == "get_fee_policy":
-                # TODO: Implement fee policy retrieval
+                # No dedicated fee-policy tool yet — route through the
+                # Policy Agent's search_policies() once RAG/policy search exists.
                 return {"error": "Fee policy lookup not yet implemented"}
             else:
                 return {"error": f"Unknown tool: {tool_name}"}
