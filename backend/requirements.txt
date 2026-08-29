@@ -1,3 +1,7 @@
+# NOTE: your installed env may show pydantic 2.x active even with the pin
+# below (fastapi==0.95.2 predates pydantic v2). That's a harmless compat
+# shim warning ("orm_mode has been renamed to from_attributes"), not an
+# error — pydantic v2 auto-translates old v1 Config keys.
 fastapi==0.95.2
 uvicorn[standard]
 pydantic==1.10.12
@@ -8,5 +12,13 @@ python-dotenv
 alembic
 psycopg2-binary
 passlib[bcrypt]
+# passlib 1.7.4 (last release, unmaintained) calls a bcrypt internal API
+# that bcrypt>=4.1 removed, and bcrypt>=4.1 also hard-errors instead of
+# truncating on passlib's >72-byte self-test secret. Pin bcrypt<4.1 until
+# passlib is patched or replaced.
+bcrypt==4.0.1
 python-jose
 openai>=1.0.0
+# starlette 0.27 (pulled in by fastapi==0.95.2) uses TestClient(app=...),
+# which httpx>=0.28 removed. Needed for tests, not runtime.
+httpx<0.28
